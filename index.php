@@ -21,6 +21,10 @@ $data = json_decode($response, true);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kiki News</title>
 
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff3b3b">
+
 <style>
 body {
     margin: 0;
@@ -123,6 +127,13 @@ if ($data && isset($data['articles'])) {
 ?>
 
 </div>
+
+<!-- SERVICE WORKER -->
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+</script>
 
 </body>
 </html>
