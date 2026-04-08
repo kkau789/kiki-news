@@ -88,7 +88,7 @@ body {
 <div class="header">📰 Kiki News</div>
 
 <!-- APK DOWNLOAD BUTTON -->
-<a href="newsfresh.apk" download style="display:block; text-align:center; margin:10px;">
+<a href="News_fresh.apk" download style="display:block; text-align:center; margin:10px;">
   <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
     Download App 📱
   </button>
