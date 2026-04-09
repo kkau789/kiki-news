@@ -1,5 +1,5 @@
 <?php
-$apiKey = "8eb1b42cae277b04224e7487f6eb9c2c";
+$apiKey = "YOUR_API_KEY_HERE";
 
 // GNews API URL (India news)
 $url = "https://gnews.io/api/v4/top-headlines?lang=en&country=in&max=10&apikey=$apiKey";
@@ -87,12 +87,14 @@ body {
 
 <div class="header">📰 Kiki News</div>
 
-<!-- APK DOWNLOAD BUTTON -->
-  <a href="https://github.com/kkau789/kiki-news/raw/main/News_fresh.apk" target="_blank">
-  <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
-    Download App 📱
-  </button>
+<!-- ✅ DOWNLOAD BUTTON (RIGHT UNDER HEADER) -->
+<div style="text-align:center; margin:10px;">
+  <a href="https://raw.githubusercontent.com/kkau789/kiki-news/main/News_fresh.apk" target="_blank">
+    <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
+      Download App 📱
+    </button>
   </a>
+</div>
 
 <div class="container">
 
@@ -109,8 +111,8 @@ if ($data && isset($data['articles'])) {
 <?php } ?>
 
 <div class="card-content">
-<h2><?php echo $news['title']; ?></h2>
-<p><?php echo $news['description']; ?></p>
+<h2><?php echo htmlspecialchars($news['title'] ?? "No Title"); ?></h2>
+<p><?php echo htmlspecialchars($news['description'] ?? "No description"); ?></p>
 
 <a class="btn" href="<?php echo $news['url']; ?>" target="_blank">
 Read More →
