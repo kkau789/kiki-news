@@ -87,19 +87,19 @@ body {
 
 <div class="header">📰 Kiki News</div>
 
-<!-- DOWNLOAD BUTTON -->
-<div style="text-align:center; margin:10px;">
-  <a href="https://raw.githubusercontent.com/kkau789/kiki-news/main/News_fresh.apk" target="_blank">
-    <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
-      Download App 📱
-    </button>
-  </a>
+<!-- ✅ FIXED APK DOWNLOAD BUTTON -->
+<div style="text-align:center; margin:15px;">
+<a href="https://raw.githubusercontent.com/kkau789/kiki-news/main/News_fresh.apk" target="_blank">
+  <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
+    Download App 📱
+  </button>
+</a>
 </div>
 
 <div class="container">
 
 <?php
-if (!empty($data['articles'])) {
+if ($data && isset($data['articles'])) {
 
   foreach ($data['articles'] as $news) {
 ?>
