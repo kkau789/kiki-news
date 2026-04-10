@@ -5,7 +5,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
 
 <Response>
-    <Gather numDigits="1" action="menu.php" method="POST">
+    <Gather numDigits="1" action="https://app.news-fresh.is-great.net/menu.php" method="POST">
         <Say voice="alice">
             Welcome to Kiki News Support.
             Press 1 for latest news.
