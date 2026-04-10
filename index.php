@@ -87,9 +87,9 @@ body {
 
 <div class="header">📰 Kiki News</div>
 
-<!-- ✅ FIXED APK DOWNLOAD BUTTON -->
+<!-- 🔥 APK DOWNLOAD BUTTON (WORKING) -->
 <div style="text-align:center; margin:15px;">
-<a href="https://raw.githubusercontent.com/kkau789/kiki-news/main/News_fresh.apk" target="_blank">
+<a href="https://drive.google.com/uc?export=download&id=1SYav0jukj0J3WMwVc6BuDzdHxS1lH33x">
   <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
     Download App 📱
   </button>
