@@ -14,7 +14,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <?php } elseif ($input == "2") { ?>
 
 <Say voice="alice">Connecting you to support.</Say>
-<Dial>+91XXXXXXXXXX</Dial>
+<Dial>+918334063684</Dial>
 
 <?php } else { ?>
 
