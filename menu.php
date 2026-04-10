@@ -1,17 +1,24 @@
 <?php
-header("Content-type: text/xml");
+header("Content-Type: text/xml");
 
-$digit = $_POST['Digits'];
+$input = $_POST['Digits'] ?? '';
 
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-
-if ($digit == "1") {
-    echo "<Response><Say>Here are the latest headlines from Kiki News.</Say></Response>";
-}
-else if ($digit == "2") {
-    echo "<Response><Say>Connecting you to support... Please wait.</Say></Response>";
-}
-else {
-    echo "<Response><Say>Invalid input. Goodbye!</Say></Response>";
-}
+echo '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
+
+<Response>
+<?php if ($input == "1") { ?>
+
+<Say voice="alice">Here are the latest headlines from Kiki News.</Say>
+
+<?php } elseif ($input == "2") { ?>
+
+<Say voice="alice">Connecting you to support.</Say>
+<Dial>+91XXXXXXXXXX</Dial>
+
+<?php } else { ?>
+
+<Say voice="alice">Invalid input. Goodbye.</Say>
+
+<?php } ?>
+</Response>
