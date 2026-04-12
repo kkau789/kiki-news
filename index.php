@@ -87,7 +87,7 @@ body {
 
 <div class="header">📰 Kiki News</div>
 
-<!-- 🔥 FIXED DOWNLOAD BUTTON -->
+<!-- 🔥 DOWNLOAD BUTTON -->
 <div style="text-align:center; padding:10px;">
   <a href="https://drive.google.com/uc?export=download&id=1iaqe7B2W0PXDy_TwOUqXYmbW1vNDS_Jh">
     <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
@@ -128,6 +128,19 @@ Read More →
 ?>
 
 </div>
+
+<!-- 💬 Tawk Chat -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/69db4500f1325c1c3390bb2d/1jm08b307';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
 
 </body>
 </html>
