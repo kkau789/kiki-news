@@ -1,7 +1,7 @@
 <?php
 $apiKey = "8eb1b42cae277b04224e7487f6eb9c2c";
 
-// GNews API URL (India news)
+// Fetch news
 $url = "https://gnews.io/api/v4/top-headlines?lang=en&country=in&max=10&apikey=$apiKey";
 
 $ch = curl_init();
@@ -18,7 +18,10 @@ $data = json_decode($response, true);
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kiki News</title>
+<title>NewsFresh</title>
+
+<!-- 🔥 CHATWAY (your new chat system) -->
+<script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=ERAoCY1540xz"></script>
 
 <style>
 body {
@@ -34,8 +37,6 @@ body {
   font-weight: bold;
   background: #1f1f1f;
   text-align: center;
-  position: sticky;
-  top: 0;
 }
 
 .container {
@@ -47,7 +48,6 @@ body {
   margin-bottom: 15px;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
 .card img {
@@ -60,9 +60,8 @@ body {
   padding: 12px;
 }
 
-.card h2 {
+.card h3 {
   font-size: 16px;
-  margin: 0 0 8px;
 }
 
 .card p {
@@ -78,28 +77,18 @@ body {
   color: white;
   text-decoration: none;
   border-radius: 6px;
-  font-size: 13px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">📰 Kiki News</div>
-
-<!-- 🔥 DOWNLOAD BUTTON -->
-<div style="text-align:center; padding:10px;">
-  <a href="https://drive.google.com/uc?export=download&id=1iaqe7B2W0PXDy_TwOUqXYmbW1vNDS_Jh">
-    <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
-      Download App 📱
-    </button>
-  </a>
-</div>
+<div class="header">📰 NewsFresh</div>
 
 <div class="container">
 
 <?php
-if ($data && isset($data['articles'])) {
+if ($data && isset($data['articles']) && !empty($data['articles'])) {
 
   foreach ($data['articles'] as $news) {
 ?>
@@ -111,7 +100,7 @@ if ($data && isset($data['articles'])) {
 <?php } ?>
 
 <div class="card-content">
-<h2><?php echo $news['title']; ?></h2>
+<h3><?php echo $news['title']; ?></h3>
 <p><?php echo $news['description']; ?></p>
 
 <a class="btn" href="<?php echo $news['url']; ?>" target="_blank">
@@ -124,23 +113,12 @@ Read More →
 <?php
   }
 
+} else {
+  echo "<p style='text-align:center;'>No news available</p>";
 }
 ?>
 
 </div>
-
-<!-- 💬 Tawk Chat -->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69db4500f1325c1c3390bb2d/1jm08b307';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
 
 </body>
 </html>
