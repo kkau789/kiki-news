@@ -87,13 +87,13 @@ body {
 
 <div class="header">📰 Kiki News</div>
 
-<!-- 🔥 APK DOWNLOAD BUTTON (WORKING) -->
-<div style="text-align:center; margin:15px;">
-<a href="https://drive.google.com/uc?export=download&id=1SYav0jukj0J3WMwVc6BuDzdHxS1lH33x">
-  <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
-    Download App 📱
-  </button>
-</a>
+<!-- 🔥 FIXED DOWNLOAD BUTTON -->
+<div style="text-align:center; padding:10px;">
+  <a href="https://drive.google.com/uc?export=download&id=1iaqe7B2W0PXDy_TwOUqXYmbW1vNDS_Jh">
+    <button style="padding:10px 15px; background:#ff3b3b; color:white; border:none; border-radius:8px;">
+      Download App 📱
+    </button>
+  </a>
 </div>
 
 <div class="container">
@@ -124,8 +124,6 @@ Read More →
 <?php
   }
 
-} else {
-  echo "<p style='text-align:center;color:red;'>⚠️ Failed to load news</p>";
 }
 ?>
 
