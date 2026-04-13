@@ -2,11 +2,15 @@
 session_start();
 
 if (!isset($_SESSION["admin"])) {
-    die("Access denied");
+    die("Access Denied");
 }
 
 $file = "tickets.json";
 $data = json_decode(file_get_contents($file), true);
+
+if (!is_array($data)) {
+    $data = [];
+}
 
 foreach ($data as &$t) {
     if ($t["id"] == $_POST["id"]) {
