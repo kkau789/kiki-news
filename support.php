@@ -1,8 +1,18 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $file = "tickets.json";
-    $data = json_decode(file_get_contents($file), true);
+$file = "tickets.json";
+
+if (!file_exists($file)) {
+    file_put_contents($file, "[]");
+}
+
+$data = json_decode(file_get_contents($file), true);
+
+if (!is_array($data)) {
+    $data = [];
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $ticket = [
         "id" => "NF" . rand(1000,9999),
@@ -20,9 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<h2>📩 NewsFresh Support</h2>
+<h2>📩 Support System</h2>
 
 <form method="POST">
     <input name="message" placeholder="Write your issue..." required>
-    <button type="submit">Send</button>
+    <button type="submit">Send Ticket</button>
 </form>
