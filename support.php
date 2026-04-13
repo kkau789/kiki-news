@@ -1,4 +1,5 @@
 <?php
+
 $BIN_ID = "69dd19daaaba882197f509b4";
 $API_KEY = "$2a$10$8s5iCInzkF2FNn3aSgijbOgbK.zV0wyk2gguS14iLMmDjXR2AFQwu";
 
@@ -8,35 +9,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "id" => "NF" . rand(1000,9999),
         "message" => $_POST["message"],
         "status" => "open",
+        "reply" => "",
         "time" => date("Y-m-d H:i:s")
     ];
 
-    // GET existing tickets
-    $url = "https://api.jsonbin.io/v3/b/$BIN_ID/latest";
-
-    $ch = curl_init($url);
+    // GET
+    $ch = curl_init("https://api.jsonbin.io/v3/b/$BIN_ID/latest");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         "X-Master-Key: $API_KEY"
     ]);
-
     $response = curl_exec($ch);
     curl_close($ch);
 
     $data = json_decode($response, true);
     $tickets = $data["record"] ?? [];
 
-    if (!is_array($tickets)) {
-        $tickets = [];
-    }
-
-    // ADD new ticket
+    // ADD
     $tickets[] = $newTicket;
 
-    // SAVE back
-    $saveUrl = "https://api.jsonbin.io/v3/b/$BIN_ID";
-
-    $ch = curl_init($saveUrl);
+    // SAVE
+    $ch = curl_init("https://api.jsonbin.io/v3/b/$BIN_ID");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -44,17 +37,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "X-Master-Key: $API_KEY"
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($tickets));
-
     curl_exec($ch);
     curl_close($ch);
 
-    echo "🔥 Ticket Created Successfully!";
+    $success = "Ticket sent successfully";
 }
 ?>
 
-<h2>📩 Support System</h2>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Support</title>
+<style>
+body {
+    font-family: Arial;
+    background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.box {
+    background: white;
+    padding: 25px;
+    width: 350px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+h2 {
+    margin-bottom: 15px;
+}
+textarea {
+    width: 100%;
+    padding: 10px;
+    height: 100px;
+}
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background: black;
+    color: white;
+    border: none;
+}
+.success {
+    color: green;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2>📩 Contact Support</h2>
+
+<?php if (isset($success)) echo "<p class='success'>$success</p>"; ?>
 
 <form method="POST">
-    <input name="message" placeholder="Write your issue..." required>
-    <button type="submit">Send Ticket</button>
+    <textarea name="message" placeholder="Write your issue..." required></textarea>
+    <button type="submit">Send</button>
 </form>
+
+</div>
+
+</body>
+</html>
