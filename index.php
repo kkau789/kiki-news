@@ -66,22 +66,30 @@ body {
   border-radius: 6px;
 }
 
-/* YOUR CHAT */
+/* CHAT BUTTON */
 #chat-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  width: 55px;
+  height: 55px;
   background: #ff3b3b;
-  padding: 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
   cursor: pointer;
 }
 
+/* CHAT BOX */
 #chat-box {
   position: fixed;
-  bottom: 70px;
+  bottom: 80px;
   right: 20px;
   width: 300px;
   background: #1e1e1e;
+  border-radius: 10px;
   display: none;
 }
 
@@ -94,6 +102,7 @@ body {
   height: 200px;
   overflow-y: auto;
   padding: 10px;
+  font-size: 13px;
 }
 
 #chat-form {
@@ -144,13 +153,14 @@ Read More
 
 </div>
 
-<!-- YOUR CHAT -->
-<div id="chat-btn" onclick="openChat()">Support</div>
+<!-- CHAT BUTTON -->
+<div id="chat-btn" onclick="openChat()">💬</div>
 
+<!-- CHAT BOX -->
 <div id="chat-box">
   <div id="chat-header">
     News Fresh Support
-    <span onclick="closeChat()" style="float:right;">X</span>
+    <span onclick="closeChat()" style="float:right;cursor:pointer;">X</span>
   </div>
 
   <div id="chat-body">
@@ -172,6 +182,7 @@ function closeChat() {
   document.getElementById("chat-box").style.display = "none";
 }
 
+/* SEND MESSAGE */
 document.getElementById("chat-form").addEventListener("submit", function(e) {
   e.preventDefault();
 
@@ -192,6 +203,37 @@ document.getElementById("chat-form").addEventListener("submit", function(e) {
 
   document.getElementById("msg").value = "";
 });
+
+/* FETCH REPLIES */
+let lastReply = "";
+
+setInterval(() => {
+  fetch("https://api.jsonbin.io/v3/b/69dd19daaaba882197f509b4/latest", {
+    headers: {
+      "X-Master-Key": "$2a$10$8s5iCInzkF2FNn3aSgijbOgbK.zV0wyk2gguS14iLMmDjXR2AFQwu"
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    let tickets = data.record || [];
+
+    if (tickets.length > 0) {
+      let lastTicket = tickets[tickets.length - 1];
+
+      if (lastTicket.reply && lastTicket.reply !== "" && lastTicket.reply !== lastReply) {
+
+        let div = document.createElement("div");
+        div.style.textAlign = "left";
+        div.innerText = lastTicket.reply;
+
+        document.getElementById("chat-body").appendChild(div);
+
+        lastReply = lastTicket.reply;
+      }
+    }
+  });
+
+}, 3000);
 </script>
 
 </body>
