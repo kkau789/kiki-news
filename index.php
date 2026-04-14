@@ -1,7 +1,6 @@
 <?php
 $apiKey = "8eb1b42cae277b04224e7487f6eb9c2c";
 
-// Fetch news
 $url = "https://gnews.io/api/v4/top-headlines?lang=en&country=in&max=10&apikey=$apiKey";
 
 $ch = curl_init();
@@ -19,9 +18,6 @@ $data = json_decode($response, true);
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NewsFresh</title>
-
-<!-- CHATWAY (UNCHANGED) -->
-<script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=ERAoCY1540xz"></script>
 
 <style>
 body {
@@ -60,15 +56,6 @@ body {
   padding: 12px;
 }
 
-.card h3 {
-  font-size: 16px;
-}
-
-.card p {
-  font-size: 13px;
-  color: #ccc;
-}
-
 .btn {
   display: inline-block;
   margin-top: 10px;
@@ -79,75 +66,66 @@ body {
   border-radius: 6px;
 }
 
-/* 🔥 YOUR CHAT UI */
-#my-chat-button {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: #ff3b3b;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
+/* YOUR CHAT */
+#chat-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #ff3b3b;
+  padding: 12px;
+  cursor: pointer;
 }
 
-#my-chat-box {
-    position: fixed;
-    bottom: 70px;
-    left: 20px;
-    width: 300px;
-    background: #1e1e1e;
-    color: white;
-    border-radius: 10px;
-    display: none;
+#chat-box {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  width: 300px;
+  background: #1e1e1e;
+  display: none;
 }
 
-#my-chat-header {
-    background: #ff3b3b;
-    padding: 10px;
-    font-weight: bold;
+#chat-header {
+  background: #ff3b3b;
+  padding: 10px;
 }
 
-#my-chat-body {
-    height: 200px;
-    overflow-y: auto;
-    padding: 10px;
-    font-size: 13px;
+#chat-body {
+  height: 200px;
+  overflow-y: auto;
+  padding: 10px;
 }
 
-#my-chat-form {
-    display: flex;
+#chat-form {
+  display: flex;
 }
 
-#my-chat-form input {
-    flex: 1;
-    padding: 8px;
-    border: none;
+#chat-form input {
+  flex: 1;
+  padding: 8px;
 }
 
-#my-chat-form button {
-    padding: 8px;
-    background: #ff3b3b;
-    color: white;
-    border: none;
+#chat-form button {
+  padding: 8px;
+  background: #ff3b3b;
+  color: white;
+  border: none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">📰 NewsFresh</div>
+<div class="header">NewsFresh</div>
 
 <div class="container">
 
 <?php
-if ($data && isset($data['articles']) && !empty($data['articles'])) {
-
+if ($data && isset($data['articles'])) {
   foreach ($data['articles'] as $news) {
 ?>
 
 <div class="card">
-
 <?php if (!empty($news['image'])) { ?>
 <img src="<?php echo $news['image']; ?>">
 <?php } ?>
@@ -157,69 +135,62 @@ if ($data && isset($data['articles']) && !empty($data['articles'])) {
 <p><?php echo $news['description']; ?></p>
 
 <a class="btn" href="<?php echo $news['url']; ?>" target="_blank">
-Read More →
+Read More
 </a>
 </div>
+</div>
+
+<?php } } ?>
 
 </div>
 
-<?php
-  }
+<!-- YOUR CHAT -->
+<div id="chat-btn" onclick="openChat()">Support</div>
 
-} else {
-  echo "<p style='text-align:center;'>No news available</p>";
-}
-?>
+<div id="chat-box">
+  <div id="chat-header">
+    News Fresh Support
+    <span onclick="closeChat()" style="float:right;">X</span>
+  </div>
 
-</div>
+  <div id="chat-body">
+    <div>Welcome. How can we help?</div>
+  </div>
 
-<!-- 🔥 YOUR CUSTOM CHAT -->
-<div id="my-chat-button" onclick="openMyChat()">Support</div>
-
-<div id="my-chat-box">
-    <div id="my-chat-header">
-        News Fresh Studios Support
-        <span onclick="closeMyChat()" style="float:right;cursor:pointer;">X</span>
-    </div>
-
-    <div id="my-chat-body">
-        <div>Welcome. How can we help you?</div>
-    </div>
-
-    <form id="my-chat-form">
-        <input type="text" id="my-msg" placeholder="Type your message..." required>
-        <button type="submit">Send</button>
-    </form>
+  <form id="chat-form">
+    <input id="msg" placeholder="Type..." required>
+    <button>Send</button>
+  </form>
 </div>
 
 <script>
-function openMyChat() {
-    document.getElementById("my-chat-box").style.display = "block";
+function openChat() {
+  document.getElementById("chat-box").style.display = "block";
 }
 
-function closeMyChat() {
-    document.getElementById("my-chat-box").style.display = "none";
+function closeChat() {
+  document.getElementById("chat-box").style.display = "none";
 }
 
-document.getElementById("my-chat-form").addEventListener("submit", function(e) {
-    e.preventDefault();
+document.getElementById("chat-form").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-    let msg = document.getElementById("my-msg").value;
+  let msg = document.getElementById("msg").value;
 
-    let div = document.createElement("div");
-    div.style.textAlign = "right";
-    div.innerText = msg;
-    document.getElementById("my-chat-body").appendChild(div);
+  let div = document.createElement("div");
+  div.style.textAlign = "right";
+  div.innerText = msg;
+  document.getElementById("chat-body").appendChild(div);
 
-    fetch("support.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "message=" + encodeURIComponent(msg)
-    });
+  fetch("support.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: "message=" + encodeURIComponent(msg)
+  });
 
-    document.getElementById("my-msg").value = "";
+  document.getElementById("msg").value = "";
 });
 </script>
 
