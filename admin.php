@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 /* USERS */
 $USERS = [
     "admin" => "1234"
@@ -79,7 +80,7 @@ button {
 exit;
 }
 
-/* FETCH */
+/* FETCH DATA */
 $ch = curl_init("https://api.jsonbin.io/v3/b/$BIN_ID/latest");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -91,11 +92,11 @@ curl_close($ch);
 $data = json_decode($response, true);
 $tickets = $data["record"] ?? [];
 
-/* REPLY */
-if (isset($_POST["reply"])) {
+/* REPLY HANDLER */
+if (isset($_POST["reply"]) && isset($_POST["ticket_id"])) {
 
     foreach ($tickets as &$t) {
-        if ($t["id"] === $_POST["ticket_id"]) {
+        if (isset($t["id"]) && $t["id"] === $_POST["ticket_id"]) {
             $t["reply"] = $_POST["reply"];
             $t["status"] = "replied";
         }
@@ -134,6 +135,10 @@ body {
     display: flex;
     justify-content: space-between;
 }
+.header a {
+    color: white;
+    text-decoration: none;
+}
 .container {
     padding: 25px;
 }
@@ -147,6 +152,10 @@ body {
     padding: 15px;
     margin-bottom: 15px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.ticket b {
+    display: inline-block;
+    width: 100px;
 }
 .ticket input {
     width: 100%;
@@ -165,32 +174,40 @@ body {
 <body>
 
 <div class="header">
-    <div>News Test Studios</div>
-    <div><a href="?logout=true" style="color:white;">Logout</a></div>
+    <div>News Fresh Studios</div>
+    <div><a href="?logout=true">Logout</a></div>
 </div>
 
 <div class="container">
 
 <div class="welcome">
-Welcome, <?php echo ucfirst($_SESSION["admin"]); ?>, News fresh Studios
+Welcome, <?php echo ucfirst($_SESSION["admin"]); ?>, News Fresh Studios
 </div>
 
-<?php foreach ($tickets as $t) { ?>
-<div class="ticket">
-    <b>ID:</b> <?php echo $t["id"]; ?><br>
-    <b>Message:</b> <?php echo $t["message"]; ?><br>
-    <b>Status:</b> <?php echo $t["status"]; ?><br>
+<?php if (!empty($tickets)) { ?>
 
-    <?php if (!empty($t["reply"])) { ?>
-        <b>Reply:</b> <?php echo $t["reply"]; ?><br>
+    <?php foreach ($tickets as $t) { ?>
+
+        <div class="ticket">
+            <div><b>ID:</b> <?php echo isset($t["id"]) ? $t["id"] : ""; ?></div>
+            <div><b>Message:</b> <?php echo isset($t["message"]) ? $t["message"] : ""; ?></div>
+            <div><b>Status:</b> <?php echo isset($t["status"]) ? $t["status"] : "open"; ?></div>
+
+            <?php if (isset($t["reply"]) && $t["reply"] !== "") { ?>
+                <div><b>Reply:</b> <?php echo $t["reply"]; ?></div>
+            <?php } ?>
+
+            <form method="POST">
+                <input type="hidden" name="ticket_id" value="<?php echo isset($t["id"]) ? $t["id"] : ""; ?>">
+                <input name="reply" placeholder="Write reply..." required>
+                <button type="submit">Reply</button>
+            </form>
+        </div>
+
     <?php } ?>
 
-    <form method="POST">
-        <input type="hidden" name="ticket_id" value="<?php echo $t["id"]; ?>">
-        <input name="reply" placeholder="Write reply..." required>
-        <button type="submit">Reply</button>
-    </form>
-</div>
+<?php } else { ?>
+    <p>No tickets available</p>
 <?php } ?>
 
 </div>
