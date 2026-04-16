@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body style="background:black;color:white;text-align:center;">
+
+<h2>🔐 Admin Login</h2>
+<button onclick="login()">Login with Fingerprint</button>
+
+<script>
+async function login() {
+    let res = await fetch("webauthn/start_login.php");
+    let options = await res.json();
+
+    options.challenge = Uint8Array.from(atob(options.challenge), c => c.charCodeAt(0));
+
+    let cred = await navigator.credentials.get({ publicKey: options });
+
+    let data = {
+        id: cred.id,
+        rawId: btoa(String.fromCharCode(...new Uint8Array(cred.rawId))),
+        type: cred.type,
+        response: {
+            authenticatorData: btoa(String.fromCharCode(...new Uint8Array(cred.response.authenticatorData))),
+            clientDataJSON: btoa(String.fromCharCode(...new Uint8Array(cred.response.clientDataJSON))),
+            signature: btoa(String.fromCharCode(...new Uint8Array(cred.response.signature)))
+        }
+    };
+
+    await fetch("webauthn/finish_login.php", {
+        method: "POST",
+        body: JSON.stringify(data)
+    });
+
+    window.location = "admin.php";
+}
+</script>
+
+</body>
+</html>
