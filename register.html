@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body style="background:black;color:white;text-align:center;">
+
+<h2>🔐 Register Admin Fingerprint</h2>
+<button onclick="register()">Register</button>
+
+<script>
+async function register() {
+    let res = await fetch("webauthn/start_register.php");
+    let options = await res.json();
+
+    options.challenge = Uint8Array.from(atob(options.challenge), c => c.charCodeAt(0));
+    options.user.id = Uint8Array.from(atob(options.user.id), c => c.charCodeAt(0));
+
+    let cred = await navigator.credentials.create({ publicKey: options });
+
+    let data = {
+        id: cred.id,
+        rawId: btoa(String.fromCharCode(...new Uint8Array(cred.rawId))),
+        type: cred.type,
+        response: {
+            attestationObject: btoa(String.fromCharCode(...new Uint8Array(cred.response.attestationObject))),
+            clientDataJSON: btoa(String.fromCharCode(...new Uint8Array(cred.response.clientDataJSON)))
+        }
+    };
+
+    await fetch("webauthn/finish_register.php", {
+        method: "POST",
+        body: JSON.stringify(data)
+    });
+
+    alert("Registered 🔐");
+}
+</script>
+
+</body>
+</html>
