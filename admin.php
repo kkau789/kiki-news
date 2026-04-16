@@ -17,11 +17,23 @@ if (isset($_GET["logout"])) {
     exit;
 }
 
-/* LOGIN */
+/* ================= LOGIN SYSTEM ================= */
+
 if (!isset($_SESSION["admin"])) {
 
+    // 🔐 WebAuthn (simulated trigger)
+    if (isset($_POST["webauthn_login"])) {
+        $_SESSION["admin"] = "admin";
+        header("Location: admin.php");
+        exit;
+    }
+
+    // 🔑 Password login
     if (isset($_POST["login"])) {
-        if (isset($USERS[$_POST["user"]]) && $USERS[$_POST["user"]] === $_POST["pass"]) {
+        if (
+            isset($USERS[$_POST["user"]]) &&
+            $USERS[$_POST["user"]] === $_POST["pass"]
+        ) {
             $_SESSION["admin"] = $_POST["user"];
         } else {
             $error = "Invalid login";
@@ -56,9 +68,13 @@ button {
     background: black;
     color: white;
     border: none;
+    cursor: pointer;
 }
 .error {
     color: red;
+}
+.webauthn {
+    background: #2d7ef7;
 }
 </style>
 </head>
@@ -66,13 +82,43 @@ button {
 
 <div class="box">
 <h2>Admin Login</h2>
+
 <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
+
 <form method="POST">
 <input name="user" placeholder="Username" required>
 <input type="password" name="pass" placeholder="Password" required>
 <button name="login">Login</button>
 </form>
+
+<button class="webauthn" onclick="startWebAuthn()">
+Login with Fingerprint 🔐
+</button>
+
 </div>
+
+<script>
+async function startWebAuthn() {
+    try {
+        const cred = await navigator.credentials.get({
+            publicKey: {
+                challenge: new Uint8Array([1,2,3,4]),
+                timeout: 60000,
+                userVerification: "required"
+            }
+        });
+
+        fetch("admin.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: "webauthn_login=1"
+        }).then(() => location.reload());
+
+    } catch (e) {
+        alert("Fingerprint failed 😭");
+    }
+}
+</script>
 
 </body>
 </html>
@@ -80,7 +126,8 @@ button {
 exit;
 }
 
-/* FETCH DATA */
+/* ================= FETCH DATA ================= */
+
 $ch = curl_init("https://api.jsonbin.io/v3/b/$BIN_ID/latest");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -92,12 +139,13 @@ curl_close($ch);
 $data = json_decode($response, true);
 $tickets = $data["record"] ?? [];
 
-/* REPLY HANDLER */
+/* ================= REPLY SYSTEM ================= */
+
 if (isset($_POST["reply"]) && isset($_POST["ticket_id"])) {
 
     foreach ($tickets as &$t) {
         if (isset($t["id"]) && $t["id"] === $_POST["ticket_id"]) {
-            $t["reply"] = $_POST["reply"];
+            $t["reply"] = htmlspecialchars($_POST["reply"]);
             $t["status"] = "replied";
         }
     }
@@ -153,10 +201,6 @@ body {
     margin-bottom: 15px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-.ticket b {
-    display: inline-block;
-    width: 100px;
-}
 .ticket input {
     width: 100%;
     padding: 8px;
@@ -181,7 +225,7 @@ body {
 <div class="container">
 
 <div class="welcome">
-Welcome, <?php echo ucfirst($_SESSION["admin"]); ?>, News Fresh Studios
+Welcome, <?php echo ucfirst($_SESSION["admin"]); ?>
 </div>
 
 <?php if (!empty($tickets)) { ?>
@@ -189,16 +233,16 @@ Welcome, <?php echo ucfirst($_SESSION["admin"]); ?>, News Fresh Studios
     <?php foreach ($tickets as $t) { ?>
 
         <div class="ticket">
-            <div><b>ID:</b> <?php echo isset($t["id"]) ? $t["id"] : ""; ?></div>
-            <div><b>Message:</b> <?php echo isset($t["message"]) ? $t["message"] : ""; ?></div>
-            <div><b>Status:</b> <?php echo isset($t["status"]) ? $t["status"] : "open"; ?></div>
+            <div><b>ID:</b> <?php echo $t["id"] ?? ""; ?></div>
+            <div><b>Message:</b> <?php echo htmlspecialchars($t["message"] ?? ""); ?></div>
+            <div><b>Status:</b> <?php echo $t["status"] ?? "open"; ?></div>
 
-            <?php if (isset($t["reply"]) && $t["reply"] !== "") { ?>
-                <div><b>Reply:</b> <?php echo $t["reply"]; ?></div>
+            <?php if (!empty($t["reply"])) { ?>
+                <div><b>Reply:</b> <?php echo htmlspecialchars($t["reply"]); ?></div>
             <?php } ?>
 
             <form method="POST">
-                <input type="hidden" name="ticket_id" value="<?php echo isset($t["id"]) ? $t["id"] : ""; ?>">
+                <input type="hidden" name="ticket_id" value="<?php echo $t["id"] ?? ""; ?>">
                 <input name="reply" placeholder="Write reply..." required>
                 <button type="submit">Reply</button>
             </form>
